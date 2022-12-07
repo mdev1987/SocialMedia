@@ -13,8 +13,14 @@
     border-radius: 0.5rem;
 }
 
+.Post>span:nth-of-type(1){
+    color: var(--gray);
+    font-size: 12;
+}
+
 .postReact {
     display: flex;
     align-items: flex-start;
     gap: 1.5rem;
 }
+
