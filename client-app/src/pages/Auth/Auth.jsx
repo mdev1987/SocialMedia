@@ -65,22 +65,24 @@ function Login() {
     return (
         <div className="a-right">
             <form className="infoForm authForm">
-                <h3>Login</h3>                
+                <h3>Login</h3>
                 <div>
                     <input type="text"
                         autoFocus
                         name='username'
                         className='infoInput'
                         placeholder='User Name' />
-                        <input type="text"
+                </div>
+                <div>
+                    <input type="text"
                         name='password'
                         className='infoInput'
                         placeholder='Password' />
-                </div>                
+                </div>
                 <div>
                     <span>Don't have an account? <a href='#'><strong>Sign Up</strong></a></span>
-                </div>
-                <button className='button infoButton' type='submit'>Login</button>
+                    <button className='button infoButton' type='submit'>Login</button>
+                </div>              
             </form>
         </div>
     )
