@@ -4,21 +4,24 @@ import Comment from '../../img/comment.png';
 import Share from '../../img/share.png';
 import Heart from '../../img/like.png';
 import NotLike from '../../img/notlike.png';
+import { HOST } from '../../consts/apiRoute';
+import { useSelector } from 'react-redux';
 
 function Post({ data }) {
+    const { username } = useSelector(state => state.auth.authData.payload);    
     return (
         <div className="Post">
-            <img src={data.img} alt="post image" />
+            <img src={`${HOST}/${data.image.replace('public/', '')}`} alt="post image" />
 
             <div className='postReact'>
-                <img src={data.liked ? Heart : NotLike} alt="like" />
+                <img src={data.likes.length > 0 ? Heart : NotLike} alt="like" />
                 <img src={Comment} alt="comment" />
                 <img src={Share} alt="share" />
             </div>
-            <span>{data.likes} likes</span>
+            <span>{data.likes.length} likes</span>
             <div className="detail">
                 <span>
-                    <strong>{data.name}: </strong>
+                    <strong>{username}: </strong>
                     <span>{data.desc}</span>
                 </span>
             </div>

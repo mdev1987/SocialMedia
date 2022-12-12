@@ -6,4 +6,4 @@ export const LOGIN = `${HOST}/auth/login`;
 
 
 // post url
-export const UPLOAD_IMAGE = `${HOST}/post`;
+export const SHARE_POST = `${HOST}/post`;
