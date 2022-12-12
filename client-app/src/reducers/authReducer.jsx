@@ -5,7 +5,7 @@ import { SIGNUP, LOGIN } from '../consts/apiRoute';
 const initialState = {
     loading: false,
     error: false,
-    authData: localStorage.getItem('authData'),
+    authData: JSON.parse(localStorage.getItem('authData')),
     errorMessage: '',
 }
 
@@ -30,10 +30,10 @@ const authReducer = createSlice({
                 state.errorMessage = action.payload.message;
             }
         })
-        builder.addCase(logIn.pending, (state, action)=> {
+        builder.addCase(logIn.pending, (state, action) => {
             state.loading = true;
         })
-        builder.addCase(logIn.fulfilled, (state, action)=>{
+        builder.addCase(logIn.fulfilled, (state, action) => {
             state.loading = false;
             if (action.payload.success) {
                 state.error = false;
@@ -50,7 +50,7 @@ const authReducer = createSlice({
 
 export const signUp = createAsyncThunk('singup',
     async (formData, thunkAPI) => {
-        try {            
+        try {
             const response = await axios.post(SIGNUP, formData);
 
             return { success: true, data: response.data }
