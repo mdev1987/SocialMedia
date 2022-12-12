@@ -1,6 +1,6 @@
 import React from 'react'
 import './Posts.css';
-import { PostsData } from '../../Data/PostsData'
+import { PostsData } from '../../data/PostsData'
 import Post from '../Post/Post';
 
 function Posts() {
