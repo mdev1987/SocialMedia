@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import './Auth.css';
 import Logo from '../../img/logo.png';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signUp, logIn } from '../../reducers/authReducer';
 
 function Auth() {
-    const [isSignUp, setIsSignUp] = useState(true);
-    const { loading, ...authData } = useSelector(state => state.auth);
+    const [isSignUp, setIsSignUp] = useState(false);
+    const { loading, authData } = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
@@ -24,6 +26,11 @@ function Auth() {
         })
     }
 
+    const handleSignUpLogin = (event) => {
+        event.preventDefault();
+        setIsSignUp(!isSignUp)
+    }
+
     const onSumbitData = (event) => {
         event.preventDefault();
         if (isSignUp) {
@@ -31,8 +38,8 @@ function Auth() {
                 dispatch(signUp(formData)).then(response => {
                     const { success, message, data } = response.payload;
                     if (success) {
-                        toast.success('Success')
-                        console.log(data)
+                        localStorage.setItem('authData', JSON.stringify(data))
+                        navigate('/')
                     } else {
                         toast.error(message);
                     }
@@ -42,8 +49,8 @@ function Auth() {
             dispatch(logIn(formData)).then(response => {
                 const { success, message, data } = response.payload;
                 if (success) {
-                    toast.success('Success')
-                    console.log(data)
+                    localStorage.setItem('authData', JSON.stringify(data))
+                    navigate('/')
                 } else {
                     toast.error(message);
                 }
@@ -110,8 +117,8 @@ function Auth() {
                     </div>
                     <div>
                         {
-                            isSignUp ? (<span>Already have an account? <a href='#'><strong>Login</strong></a></span>)
-                                : (<span>Don't have an account? <a href='#'><strong>Sign Up</strong></a></span>)
+                            isSignUp ? (<span>Already have an account? <a href='' onClick={handleSignUpLogin}><strong>Login</strong></a></span>)
+                                : (<span>Don't have an account? <a href='' onClick={handleSignUpLogin}><strong>Sign Up</strong></a></span>)
                         }
                     </div>
                     <button disabled={loading} type='submit' className='button infoButton' >

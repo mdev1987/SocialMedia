@@ -2,34 +2,23 @@ import "./App.css"
 import Auth from "./pages/Auth/Auth";
 import Home from "./pages/home/Home";
 import Profile from "./pages/Profile/Profile";
-import { Slide, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
-import store from './store';
-import { Provider } from "react-redux";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 function App() {
-  return (
-    <Provider store={store}>
-      <div className="App">
+  const user = useSelector(state => state.auth.authData);
 
-        <div style={{ top: '-18%', right: '0' }} className="blur"></div>
-        <div style={{ top: '36%', left: '-8rem' }} className="blur"></div>
-        {/* <Home/> */}
-        {/* <Profile/> */}
-        <Auth />
-        <ToastContainer position="top-right"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={true}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss={false}
-          draggable
-          pauseOnHover
-          transition={Slide}
-          theme="colored" />
-      </div>
-    </Provider>
+  return (
+    <div className="App">
+      <div style={{ top: '-18%', right: '0' }} className="blur"></div>
+      <div style={{ top: '36%', left: '-8rem' }} className="blur"></div>
+      <Routes>      
+        <Route path="/auth" element={user ? <Navigate to="/" /> : <Auth />} />
+        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/auth" />} />
+        <Route path="/" element={user ? <Home /> : <Navigate to="/auth" />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </div>
   );
 }
 

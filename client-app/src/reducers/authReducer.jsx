@@ -5,7 +5,7 @@ import { SIGNUP, LOGIN } from '../consts/apiRoute';
 const initialState = {
     loading: false,
     error: false,
-    response: null,
+    authData: localStorage.getItem('authData'),
     errorMessage: '',
 }
 
@@ -22,11 +22,11 @@ const authReducer = createSlice({
             state.loading = false;
             if (action.payload.success) {
                 state.error = false;
-                state.response = action.payload.data;
+                state.authData = action.payload.data;
                 state.errorMessage = '';
             } else {
                 state.error = true;
-                state.response = null;
+                state.authData = null;
                 state.errorMessage = action.payload.message;
             }
         })
@@ -37,11 +37,11 @@ const authReducer = createSlice({
             state.loading = false;
             if (action.payload.success) {
                 state.error = false;
-                state.response = action.payload.data;
+                state.authData = action.payload.data;
                 state.errorMessage = '';
             } else {
                 state.error = true;
-                state.response = null;
+                state.authData = null;
                 state.errorMessage = action.payload.message;
             }
         })
