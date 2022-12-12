@@ -9,7 +9,7 @@ function Auth() {
     const [isSignUp, setIsSignUp] = useState(true);
     const { loading, ...authData } = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    const [data, setData] = useState({
+    const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
         username: "",
@@ -18,8 +18,8 @@ function Auth() {
     });
 
     const handleChange = event => {
-        setData({
-            ...data,
+        setFormData({
+            ...formData,
             [event.target.name]: event.target.value
         })
     }
@@ -28,20 +28,22 @@ function Auth() {
         event.preventDefault();
         if (isSignUp) {
             if (checkPasswordAndConfirmPass()) {
-                dispatch(signUp(data)).then(data => {
-                    const { success, message } = data.payload;
+                dispatch(signUp(formData)).then(response => {
+                    const { success, message, data } = response.payload;
                     if (success) {
                         toast.success('Success')
+                        console.log(data)
                     } else {
                         toast.error(message);
                     }
                 })
             }
         } else {
-            dispatch(logIn(data)).then(data => {
-                const { success, message } = data.payload;
+            dispatch(logIn(formData)).then(response => {
+                const { success, message, data } = response.payload;
                 if (success) {
                     toast.success('Success')
+                    console.log(data)
                 } else {
                     toast.error(message);
                 }
@@ -50,7 +52,7 @@ function Auth() {
     }
 
     const checkPasswordAndConfirmPass = () => {
-        if (data.password === data.confirmPassword) return true
+        if (formData.password === formData.confirmPassword) return true
         toast.error('Confirm Password is not same!');
         return false
     }
