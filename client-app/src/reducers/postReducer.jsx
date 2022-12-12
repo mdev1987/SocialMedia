@@ -47,6 +47,17 @@ const postReducer = createSlice({
                 state.postData = data;
             }
         })
+        builder.addCase(likePost.fulfilled, (state, action) => {
+            if (action.payload.error) {
+                const { error, errorMessage } = action.payload;
+                state.error = error;
+                state.errorMessage = errorMessage;
+            } else {
+                const { error, data } = action.payload;
+                state.error = error;                
+                state.errorMessage = '';                
+            }
+        })
     }
 })
 
@@ -62,6 +73,17 @@ export const sharePost = createAsyncThunk('sharePost', async (data, thunkApi) =>
 export const getUserPosts = createAsyncThunk('userPosts', async (id, thunkApi) => {
     try {
         const response = await axios.get(`${HOST}/post/${id}/posts`)
+        return { error: false, data: response.data }
+    } catch (ex) {
+        return { error: true, errorMessage: ex.message }
+    }
+})
+
+export const likePost = createAsyncThunk('likPost', async ({ postId, userId }, thunkApi) => {
+    try {
+        const response = await axios.post(`${HOST}/post/${postId}/like`, {
+            userId: userId
+        })
         return { error: false, data: response.data }
     } catch (ex) {
         return { error: true, errorMessage: ex.message }
