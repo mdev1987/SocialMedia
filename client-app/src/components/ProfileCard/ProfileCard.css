@@ -88,3 +88,8 @@
     margin-bottom: 1rem;
     cursor: pointer;
 }
+
+.ProfileCard>span>a {
+    text-decoration: none;
+    color: orange;
+}

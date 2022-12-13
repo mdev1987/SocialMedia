@@ -8,7 +8,7 @@ import { signUp, logIn } from '../../reducers/authReducer';
 
 function Auth() {
     const [isSignUp, setIsSignUp] = useState(false);
-    const { loading, authData } = useSelector(state => state.auth);
+    const { loading } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({

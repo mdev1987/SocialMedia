@@ -7,3 +7,7 @@ export const LOGIN = `${HOST}/auth/login`;
 
 // post url
 export const SHARE_POST = `${HOST}/post`;
+
+// default cover and profile picture
+export const defaultCover = `${HOST}/images/defaultCover.jpg`;
+export const defaultProfile = `${HOST}/images/defaultProfile.png`;

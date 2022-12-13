@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
 import './PostShare.css';
-import ProfileImage from '../../img/profileImg.jpg';
+import { defaultProfile } from '../../consts/apiRoute';
 import { UilScenery, UilPlayCircle, UilLocationPoint, UilSchedule, UilTimes } from '@iconscout/react-unicons';
 import { sharePost } from '../../reducers/postReducer';
 
@@ -11,9 +11,8 @@ function PostShare() {
     const [image, setImage] = useState(null);
     const imageRef = useRef(null);
     const dispatch = useDispatch()
-    const { payload } = useSelector(state => state.auth.authData)
-    const { postData, uploading } = useSelector(state => state.post);
-    const { id, username } = payload;
+    const { _id: id, profilePicture } = useSelector(state => state.auth.authData.user)
+    const { uploading } = useSelector(state => state.post);
     const desc = useRef(null);
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -47,7 +46,7 @@ function PostShare() {
 
     return (
         <div className="PostShare">
-            <img src={ProfileImage} alt="Profile" />
+            <img src={profilePicture ? profilePicture.replace('public/') : defaultProfile} alt="Profile" />
             <div>
                 <input ref={desc} required type="text" placeholder="What's hapeening" />
                 <div className="postOptions">

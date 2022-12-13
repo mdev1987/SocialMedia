@@ -13,7 +13,8 @@ export const registerUser = async (req, res) => {
     try {
         const newUser = await userModel.create(user);
         const token = createToken(newUser);
-        res.status(200).json({ token, payload: jwt.decode(token) });
+        newUser.password = undefined;
+        res.status(200).json({ token, user: newUser });
     } catch (ex) {
         res.status(500).json({ message: ex.message })
     }
@@ -27,7 +28,8 @@ export const loginUser = async (req, res) => {
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (isPasswordValid) {
                 const token = createToken(user);
-                res.status(200).json({ token, payload: jwt.decode(token) });
+                user.password = undefined;
+                res.status(200).json({ token, user: user });
             } else {
                 res.status(404).json({ message: 'username or password is incorret' })
             }

@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { likePost } from '../../reducers/postReducer';
 
 function Post({ data }) {
-    const { id, username } = useSelector(state => state.auth.authData.payload);
+    const { _id: id, username } = useSelector(state => state.auth.authData.user);
     const dispatch = useDispatch();
     const handleLike = (event) => {
         dispatch(likePost({ postId: data._id, userId: id }))
