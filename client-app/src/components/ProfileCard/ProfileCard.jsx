@@ -3,24 +3,26 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import './ProfileCard.css';
-import { defaultCover, defaultProfile } from '../../consts/apiRoute';
+import { HOST, DefaultCover, DefaultProfile } from '../../consts/apiRoute';
 
 function ProfileCard() {
   const { user } = useSelector(state => state.auth.authData)
   const { postData } = useSelector(state => state.post)
   const location = useLocation();
-  const isProfilePage = location.pathname === '/profile' ? true : false;
+  const isProfilePage = location.pathname.includes('/profile') ? true : false;
   return (
     <div className="ProfileCard">
       <div className="ProfileImages">
         <img
+          className={isProfilePage ? 'ProfilePage' : ''}
           src={user.coverPicture ?
-            user.coverPicture.replace('public/', '') :
-            defaultCover}
+            `${HOST}/${user.coverPicture.replace('public/', '')}` :
+            DefaultCover}
           alt="cover" />
-        <img src={user.profilePicture ?
-          user.profilePicture.replace('public/', '') :
-          defaultProfile}
+        <img
+          src={user.profilePicture ?
+            `${HOST}/${user.profilePicture.replace('public/', '')}` :
+            DefaultProfile}
           alt="profile" />
       </div>
 
@@ -58,7 +60,7 @@ function ProfileCard() {
         <hr />
       </div>
 
-      {isProfilePage ? <></> : (<span><Link to="/profile">My Profile</Link></span>)}
+      {isProfilePage ? <></> : (<span><Link to={`/profile/${user._id}`}>My Profile</Link></span>)}
     </div>
   )
 };

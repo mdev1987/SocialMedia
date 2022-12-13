@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
 import './PostShare.css';
-import { defaultProfile } from '../../consts/apiRoute';
+import { DefaultProfile, HOST } from '../../consts/apiRoute';
 import { UilScenery, UilPlayCircle, UilLocationPoint, UilSchedule, UilTimes } from '@iconscout/react-unicons';
 import { sharePost } from '../../reducers/postReducer';
 
@@ -46,7 +46,7 @@ function PostShare() {
 
     return (
         <div className="PostShare">
-            <img src={profilePicture ? profilePicture.replace('public/') : defaultProfile} alt="Profile" />
+            <img src={profilePicture ? `${HOST}/${profilePicture.replace('public/', '')}` : DefaultProfile} alt="Profile" />
             <div>
                 <input ref={desc} required type="text" placeholder="What's hapeening" />
                 <div className="postOptions">

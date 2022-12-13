@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import userMdoel from "../Models/userMdoel.js";
 
 export const getUser = async (req, res) => {
@@ -24,9 +25,24 @@ export const updateUser = async (req, res) => {
             if (password) {
                 req.body.password = await bcrypt.hash(password, 10);
             }
-            const user = await userMdoel.findByIdAndUpdate(id, req.body, { new: true })
+            if (req.files) {
+                const { profilePicture, coverPicture } = req.files;
+                if (profilePicture && profilePicture.length > 0) {
+                    req.body.profilePicture = profilePicture[0].path;
+                }
+                if (coverPicture && coverPicture.length > 0) {
+                    req.body.coverPicture = coverPicture[0].path;
+                }
+            }            
+            const user = await userMdoel.findByIdAndUpdate(id, req.body, { new: true })            
             user.password = undefined;
-            res.status(200).json(user);
+            const token = jwt.sign({
+                id: user._id,
+                username: user.username
+            }, process.env.JWT_KEY, {
+                expiresIn: '1h'
+            })
+            res.status(200).json({ token, user });
         } catch (error) {
             res.status(500).json({ message: error.message })
         }
@@ -94,3 +110,4 @@ export const unfollowUser = async (req, res) => {
         }
     }
 }
+

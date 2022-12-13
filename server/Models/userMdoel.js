@@ -25,12 +25,40 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    profilePicture: String,
-    coverPicture: String,
-    about: String,
-    livesin: String,
-    worksAt: String,
-    relationship: String,
+    profilePicture: {
+        type: String,
+        default: '',        
+    },
+
+    coverPicture: {
+        type: String,
+        default: '',        
+    },
+    about: {
+        type: String,
+        default: '',
+        trim: true,
+    },
+    livesin: {
+        type: String,
+        default: '',
+        trim: true,
+    },
+    worksAt: {
+        type: String,
+        default: '',
+        trim: true,
+    },
+    relationship: {
+        type: String,
+        default: '',
+        trim: true,
+    },
+    country: {
+        type: String,
+        default: '',
+        trim: true,
+    },
     followers: [{
         type: Schema.Types.ObjectId,
         ref: 'Users'

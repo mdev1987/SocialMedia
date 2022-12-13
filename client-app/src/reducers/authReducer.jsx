@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { SIGNUP, LOGIN } from '../consts/apiRoute';
+import { SIGNUP, LOGIN, UPDATE_PROFILE } from '../consts/apiRoute';
 
 const initialState = {
     loading: false,
@@ -13,6 +13,10 @@ const authReducer = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        logOut: (state, action) => {
+            localStorage.removeItem('authData');
+            state.authData = null;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(signUp.pending, (state, action) => {
@@ -45,6 +49,17 @@ const authReducer = createSlice({
                 state.errorMessage = action.payload.message;
             }
         })
+        builder.addCase(updateProfile.pending, (state, action) => {
+            state.upload = true;
+        })
+        builder.addCase(updateProfile.fulfilled, (state, action) => {
+            state.upload = false;
+            const { error, errorMessage, authData } = action.payload;
+            state.error = error;
+            state.errorMessage = errorMessage;
+            state.authData = authData;
+            localStorage.setItem('authData', JSON.stringify(authData))
+        })
     }
 })
 
@@ -69,6 +84,16 @@ export const logIn = createAsyncThunk('login',
         }
     })
 
+export const updateProfile = createAsyncThunk('updateProfile',
+    async ({ userId, formData }, thunkApi) => {
+        try {
+            const response = await axios.put(`${UPDATE_PROFILE}/${userId}`, formData)
+            return { error: false, authData: response.data }
+        } catch (ex) {
+            return { error: true, errorMessage: ex.response.data.message }
+        }
+    })
 
 
+export const { logOut } = authReducer.actions;
 export default authReducer.reducer;
