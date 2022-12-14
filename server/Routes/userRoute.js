@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import { authUser } from '../Controllers/authController.js';
-import { deleteUser, followUser, getUser, getUsers, unfollowUser, updateUser } from '../Controllers/userController.js';
+import { deleteUser, followUnfollowUser, getUser, getUsers, updateUser } from '../Controllers/userController.js';
 
 const router = express.Router();
 
@@ -24,8 +24,8 @@ router.put('/updateUser/:id',
         { name: 'profilePicture', maxCount: 1 },
         { name: 'coverPicture', maxCount: 1 }]), updateUser);
 router.delete('/deleteUser/:id', deleteUser);
-router.put('/followUser/:id', followUser);
-router.put('/unfollowUser/:id', unfollowUser);
+router.put('/followUnfollow/:id', followUnfollowUser);
+// router.put('/unfollowUser/:id', unfollowUser);
 
 
 export default router;

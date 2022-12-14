@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { SIGNUP, LOGIN, UPDATE_PROFILE } from '../consts/apiRoute';
+import { SIGNUP, LOGIN, UPDATE_PROFILE, FOLLOW_UNFOLLOW_USER } from '../consts/apiRoute';
 
 const initialState = {
     loading: false,
@@ -62,6 +62,19 @@ const authReducer = createSlice({
             state.error = error;
             state.errorMessage = errorMessage;
         })
+        builder.addCase(followUnfollowUser.fulfilled, (state, action) => {
+            const { error, errorMessage, followUnfollowId } = action.payload;
+            if (!error) {
+                const followings = [...state.authData.user.followings]
+                if (followings.includes(followUnfollowId)) {
+                    state.authData.user.followings = state.authData.user.followings.filter(following => following !== followUnfollowId)
+                } else {
+                    state.authData.user.followings.push(followUnfollowId);
+                }
+                localStorage.setItem('authData', JSON.stringify({ ...state.authData }))
+            }
+            state.errorMessage = errorMessage;
+        })
     }
 })
 
@@ -97,12 +110,31 @@ export const updateProfile = createAsyncThunk('updateProfile',
             })
             return { error: false, authData: response.data }
         } catch (ex) {
-            if (ex.response?.status.toString() == '401') {                
+            if (ex.response?.status.toString() == '401') {
                 return { error: true, errorMessage: '401' }
             }
             return { error: true, errorMessage: ex?.response?.data?.message ?? ex.message }
         }
     })
+
+export const followUnfollowUser = createAsyncThunk('followUser', async ({ userId, personId }, thunkApi) => {
+    const token = thunkApi.getState()?.auth?.authData?.token ?? '';
+    try {
+        const response = await axios.put(`${FOLLOW_UNFOLLOW_USER}/${personId}`, {
+            currentUserId: userId
+        }, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return { error: false, followUnfollowId: response.data.followerUnfollowerId }
+    } catch (ex) {
+        if (ex.response?.status.toString() == '401') {
+            return { error: true, errorMessage: '401' }
+        }
+        return { error: true, errorMessage: ex?.response?.data?.message ?? ex.message }
+    }
+})
 
 
 

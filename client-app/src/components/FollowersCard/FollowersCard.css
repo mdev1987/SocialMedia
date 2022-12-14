@@ -5,6 +5,8 @@
     display: flex;
     flex-direction: column;
     font-size: 13px;
+    max-height: 50vh;
+    overflow-y: auto;
 }
 
 .follower {
@@ -39,4 +41,17 @@
     height: 2rem;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.unfollow-button {
+    color: var(--orange);
+    border: 2px solid var(--orange);
+    cursor: pointer;
+    background: transparent;
+}
+
+.unfollow-button:hover {
+    color: white;
+    border: none;
+    background: var(--buttonBg);
 }

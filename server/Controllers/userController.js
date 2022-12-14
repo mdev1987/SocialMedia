@@ -66,7 +66,7 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-export const followUser = async (req, res) => {
+export const followUnfollowUser = async (req, res) => {
     const id = req.params.id;
     const { currentUserId } = req.body;
     if (currentUserId === id) {
@@ -75,42 +75,21 @@ export const followUser = async (req, res) => {
         try {
             const user = await userMdoel.findById(currentUserId);
             const followedUser = await userMdoel.findById(id);
-            if (!user.followings.includes(id)) {
-                await user.updateOne({ $push: { followings: id } })
-                await followedUser.updateOne({ $push: { followers: currentUserId } })
-                res.status(200).json({ message: "User followed." })
-            } else {
-                res.status(403).json({ message: "User already followed" })
-            }
-        } catch (error) {
-            res.status(500).json({ message: error.message })
-        }
-    }
-}
-
-
-export const unfollowUser = async (req, res) => {
-    const id = req.params.id;
-    const { currentUserId } = req.body;
-    if (currentUserId === id) {
-        res.status(403).json('Action Forbidden!');
-    } else {
-        try {
-            const user = await userMdoel.findById(currentUserId);
-            const followedUser = await userMdoel.findById(id);
-            if (user.followings.includes(id)) {
+            if (user.followings.includes(followedUser._id)) {
                 await user.updateOne({ $pull: { followings: id } })
                 await followedUser.updateOne({ $pull: { followers: currentUserId } })
-                res.status(200).json({ message: "User Unfollowed." })
-            } else {
-                res.status(403).json({ message: "User isn't followed" })
+                res.status(200).json({ message: "User Unfollowed.", followerUnfollowerId: followedUser._id })
+            }
+            else { // (!user.followings.includes(followedUser._id)) 
+                await user.updateOne({ $push: { followings: id } })
+                await followedUser.updateOne({ $push: { followers: currentUserId } })
+                res.status(200).json({ message: "User followed.", followerUnfollowerId: followedUser._id })
             }
         } catch (error) {
             res.status(500).json({ message: error.message })
         }
     }
 }
-
 
 export const getUsers = async (req, res) => {
     try {

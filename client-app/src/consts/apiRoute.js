@@ -5,6 +5,7 @@ export const SIGNUP = `${HOST}/auth/register`;
 export const LOGIN = `${HOST}/auth/login`;
 export const UPDATE_PROFILE = `${HOST}/user/updateUser`;
 export const GET_USERS = `${HOST}/user/users`;
+export const FOLLOW_UNFOLLOW_USER = `${HOST}/user/followUnfollow`;
 
 // post url
 export const SHARE_POST = `${HOST}/post`;

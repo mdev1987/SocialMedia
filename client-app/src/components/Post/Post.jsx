@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { likePost } from '../../reducers/postReducer';
 
 function Post({ data }) {
-    const { _id: id, username } = useSelector(state => state.auth.authData.user);
+    console.log(data)
+    const { _id: id } = useSelector(state => state.auth.authData.user);
     const dispatch = useDispatch();
     const handleLike = (event) => {
         dispatch(likePost({ postId: data._id, userId: id }))
@@ -32,7 +33,7 @@ function Post({ data }) {
             <span>{likes} likes</span>
             <div className="detail">
                 <span>
-                    <strong>{username}: </strong>
+                    <strong>{data.userId.username}: </strong>
                     <span>{data.desc}</span>
                 </span>
             </div>
