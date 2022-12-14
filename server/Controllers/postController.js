@@ -1,14 +1,21 @@
 import mongoose from "mongoose";
+import multer from 'multer';
 import postModel from "../Models/postModel.js";
 import userMdoel from "../Models/userMdoel.js";
 
+
 export const createPost = async (req, res) => {
-    const post = new postModel(req.body);
+
     try {
-        await postModel.create(post);
-        res.status(200).json({ message: 'Post created' });
-    } catch (error) {
-        res.status(500).json({ message: error.message })
+        const post = new postModel({
+            userId: req.body.userId,
+            desc: req.body.desc,
+            image: req.file.path,
+        })
+        await post.save();
+        res.status(200).json(post)
+    } catch (e) {
+        res.status(500).json({ message: e.message })
     }
 }
 
@@ -85,33 +92,40 @@ export const getUserPosts = async (req, res) => {
     try {
 
         const posts = await postModel.find({ userId: userId })
-            .sort({ createdAt: 'desc' })
-        const followingPosts = await userMdoel.aggregate([
-            {
-                $match: {
-                    _id: new mongoose.Types.ObjectId(userId)
-                }
-            }, {
-                $lookup: {
-                    from: 'posts',
-                    localField: 'followings',
-                    foreignField: 'userId',
-                    as: 'followingPosts'
-                }
-            }, {
-                $project: {
-                    followingPosts: 1,
-                    _id: 0
-                }
+            .populate('userId')
+            // .sort({ createdAt: 'desc' })
+        const user = await userMdoel.findById(userId);        
+        const followingPosts = await postModel.find({ userId: { $in: [...user.followings] } })
+            .populate('userId')
+            // .sort({ createdAt: 'desc' })
 
-            }
-        ]).sort({ createdAt: -1 })
+        // const followingPosts = await userMdoel.aggregate([
+        //     {
+        //         $match: {
+        //             _id: new mongoose.Types.ObjectId(userId)
+        //         }
+        //     }, {
+        //         $lookup: {
+        //             from: 'posts',
+        //             localField: 'followings',
+        //             foreignField: 'userId',
+        //             as: 'followingPosts'
+        //         }
+        //     }, {
+        //         $project: {
+        //             followingPosts: 1,                    
+        //             userId: 1,
+        //             _id: 0
+        //         }
 
-
-        res.status(200).json(posts.concat(followingPosts[0].followingPosts).sort((a, b) => b.createdAt - a.createdAt));
+        //     }
+        // ]).sort({ createdAt: -1 })   
+           
+        res.status(200).json(posts.concat(followingPosts).sort((a, b) => b.createdAt - a.createdAt));
     }
 
     catch (error) {
         res.status(500).json({ message: error.message })
     }
 }
+

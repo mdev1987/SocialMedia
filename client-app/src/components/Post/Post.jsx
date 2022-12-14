@@ -1,24 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Post.css';
 import Comment from '../../img/comment.png';
 import Share from '../../img/share.png';
 import Heart from '../../img/like.png';
 import NotLike from '../../img/notlike.png';
+import { HOST } from '../../consts/apiRoute';
+import { useSelector, useDispatch } from 'react-redux';
+import { likePost } from '../../reducers/postReducer';
 
 function Post({ data }) {
+    console.log(data)
+    const { _id: id } = useSelector(state => state.auth.authData.user);
+    const dispatch = useDispatch();
+    const handleLike = (event) => {
+        dispatch(likePost({ postId: data._id, userId: id }))
+            .then(() => {
+                setLiked((prev) => !prev);
+                liked ? setLikes(prev => prev - 1) : setLikes(prev => prev + 1)
+            })
+    }
+    const [liked, setLiked] = useState(data.likes.includes(id));
+    const [likes, setLikes] = useState(data.likes.length);
     return (
         <div className="Post">
-            <img src={data.img} alt="post image" />
+            <img src={`${HOST}/${data.image.replace('public/', '')}`} alt="post image" />
 
             <div className='postReact'>
-                <img src={data.liked ? Heart : NotLike} alt="like" />
+                <img onClick={handleLike} src={liked > 0 ? Heart : NotLike} alt="like" />
                 <img src={Comment} alt="comment" />
                 <img src={Share} alt="share" />
             </div>
-            <span>{data.likes} likes</span>
+            <span>{likes} likes</span>
             <div className="detail">
                 <span>
-                    <strong>{data.name}: </strong>
+                    <strong>{data.userId.username}: </strong>
                     <span>{data.desc}</span>
                 </span>
             </div>

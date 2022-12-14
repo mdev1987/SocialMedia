@@ -1,6 +1,6 @@
 import React from 'react';
 import './TrendCard.css';
-import { TrendData } from '../../Data/TrendData';
+import { TrendData } from '../../data/TrendData';
 
 function TrendCard() {
     return (

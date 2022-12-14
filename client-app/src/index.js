@@ -1,9 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import store from './store';
+import { Provider } from "react-redux";
+import { Slide, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import App from "./App";
 
 ReactDOM.render(
-  <App/>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <Routes>
+        <Route path="*" element={<App />} />
+      </Routes>
+    </BrowserRouter>
+    <ToastContainer position="top-right"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={true}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss={false}
+      draggable
+      pauseOnHover
+      transition={Slide}
+      theme="colored" />
+  </Provider>
+  ,
   document.getElementById("root")
 );
 

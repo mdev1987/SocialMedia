@@ -10,14 +10,16 @@
     justify-content: space-between;
 }
 
-.navIcons> img {
+.navIcons img,
+.navIcons svg {
     width: 1.5rem;
     height: 1.5rem;
+    cursor: pointer;
 }
 
 .r-button {
     height: 3rem;
     width: 80%;
     align-self: center;
-    
+
 }
