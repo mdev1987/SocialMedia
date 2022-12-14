@@ -33,8 +33,8 @@ export const updateUser = async (req, res) => {
                 if (coverPicture && coverPicture.length > 0) {
                     req.body.coverPicture = coverPicture[0].path;
                 }
-            }            
-            const user = await userMdoel.findByIdAndUpdate(id, req.body, { new: true })            
+            }
+            const user = await userMdoel.findByIdAndUpdate(id, req.body, { new: true })
             user.password = undefined;
             const token = jwt.sign({
                 id: user._id,
@@ -111,3 +111,14 @@ export const unfollowUser = async (req, res) => {
     }
 }
 
+
+export const getUsers = async (req, res) => {
+    try {
+        let users = await userMdoel
+            .find({}, { username: 1, firstname: 1, lastname: 1, profilePicture: 1 })
+            .limit(10)
+        res.status(200).json(users)
+    } catch (ex) {
+        res.status(500).json({ message: ex.message })
+    }
+}

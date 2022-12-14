@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import { authUser } from '../Controllers/authController.js';
-import { deleteUser, followUser, getUser, unfollowUser, updateUser } from '../Controllers/userController.js';
+import { deleteUser, followUser, getUser, getUsers, unfollowUser, updateUser } from '../Controllers/userController.js';
 
 const router = express.Router();
 
@@ -17,6 +17,7 @@ const profileStorage = multer.diskStorage({
 const userUpload = multer({ storage: profileStorage })
 
 router.use(authUser);
+router.get('/users', getUsers);
 router.get('/:id', getUser);
 router.put('/updateUser/:id',
     userUpload.fields([
@@ -25,5 +26,6 @@ router.put('/updateUser/:id',
 router.delete('/deleteUser/:id', deleteUser);
 router.put('/followUser/:id', followUser);
 router.put('/unfollowUser/:id', unfollowUser);
+
 
 export default router;

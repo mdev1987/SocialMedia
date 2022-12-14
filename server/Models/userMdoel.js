@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 const userSchema = new Schema({
     username: {
@@ -27,12 +27,12 @@ const userSchema = new Schema({
     },
     profilePicture: {
         type: String,
-        default: '',        
+        default: '',
     },
 
     coverPicture: {
         type: String,
-        default: '',        
+        default: '',
     },
     about: {
         type: String,
@@ -68,6 +68,5 @@ const userSchema = new Schema({
         ref: 'Users'
     }]
 }, { timestamps: true })
-
 
 export default model('Users', userSchema);

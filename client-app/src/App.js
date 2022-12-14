@@ -10,14 +10,17 @@ import { logOut } from "./reducers/authReducer";
 function App() {
   const { authData, errorMessage } = useSelector(state => state.auth);
   const { errorMessage: postErrorMessage } = useSelector(state => state.post);
+  const { errorMessage: userErrorMessage } = useSelector(state => state.user)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    if (errorMessage === '401' || postErrorMessage === '401') {
+    if (errorMessage === '401'
+      || postErrorMessage === '401'
+      || userErrorMessage === '401') {
       dispatch(logOut());
       navigate('/auth')
     }
-  }, [errorMessage, postErrorMessage])
+  }, [errorMessage, postErrorMessage, userErrorMessage])
   return (
     <div className="App">
       <div style={{ top: '-18%', right: '0' }} className="blur"></div>
