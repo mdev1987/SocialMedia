@@ -55,10 +55,12 @@ const authReducer = createSlice({
         builder.addCase(updateProfile.fulfilled, (state, action) => {
             state.upload = false;
             const { error, errorMessage, authData } = action.payload;
+            if (!error) {
+                state.authData = authData;
+                localStorage.setItem('authData', JSON.stringify(authData))
+            }
             state.error = error;
             state.errorMessage = errorMessage;
-            state.authData = authData;
-            localStorage.setItem('authData', JSON.stringify(authData))
         })
     }
 })
@@ -87,12 +89,22 @@ export const logIn = createAsyncThunk('login',
 export const updateProfile = createAsyncThunk('updateProfile',
     async ({ userId, formData }, thunkApi) => {
         try {
-            const response = await axios.put(`${UPDATE_PROFILE}/${userId}`, formData)
+            const token = thunkApi.getState()?.auth?.authData?.token ?? '';
+            const response = await axios.put(`${UPDATE_PROFILE}/${userId}`, formData, {
+                headers: {
+                    Authorization: token
+                }
+            })
             return { error: false, authData: response.data }
         } catch (ex) {
-            return { error: true, errorMessage: ex.response.data.message }
+            if (ex.response?.status.toString() == '401') {                
+                return { error: true, errorMessage: '401' }
+            }
+            return { error: true, errorMessage: ex?.response?.data?.message ?? ex.message }
         }
     })
+
+
 
 
 export const { logOut } = authReducer.actions;

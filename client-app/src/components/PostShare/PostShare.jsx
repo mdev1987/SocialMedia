@@ -1,15 +1,16 @@
 import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from 'react-toastify';
 import './PostShare.css';
 import { DefaultProfile, HOST } from '../../consts/apiRoute';
 import { UilScenery, UilPlayCircle, UilLocationPoint, UilSchedule, UilTimes } from '@iconscout/react-unicons';
 import { sharePost } from '../../reducers/postReducer';
+import { useNavigate } from 'react-router-dom';
 
 
 function PostShare() {
     const [image, setImage] = useState(null);
     const imageRef = useRef(null);
+    const navigate = useNavigate();
     const dispatch = useDispatch()
     const { _id: id, profilePicture } = useSelector(state => state.auth.authData.user)
     const { uploading } = useSelector(state => state.post);
@@ -21,7 +22,7 @@ function PostShare() {
         }
     }
 
-    const handlePostShare = (event) => {
+    const handlePostShare = () => {
         if (image) {
             const data = new FormData();
             const fileName = `${Date.now()} ${image.name}`;
@@ -29,13 +30,10 @@ function PostShare() {
             data.append('file', image);
             data.append('userId', id);
             data.append('desc', desc.current.value);
-            try {
-                dispatch(sharePost(data)).then(() => {
-                    resetForm();
-                })
-            } catch (error) {
-                toast.error(error.message)
-            }
+
+            dispatch(sharePost(data)).then(() => {                
+                resetForm();
+            })
         }
     }
 

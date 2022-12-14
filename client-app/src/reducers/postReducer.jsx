@@ -63,29 +63,53 @@ const postReducer = createSlice({
 
 export const sharePost = createAsyncThunk('sharePost', async (data, thunkApi) => {
     try {
-        const response = await axios.post(SHARE_POST, data)
+        const token = thunkApi.getState()?.auth?.authData?.token ?? '';
+        const response = await axios.post(SHARE_POST, data, {
+            headers: {
+                Authorization: token
+            }
+        })
         return { error: false, data: response.data }
     } catch (ex) {
+        if (ex.response?.status.toString() == '401') {
+            return { error: true, errorMessage: '401' }
+        }
         return { error: true, errorMessage: ex.message }
     }
 });
 
 export const getUserPosts = createAsyncThunk('userPosts', async (id, thunkApi) => {
     try {
-        const response = await axios.get(`${HOST}/post/${id}/posts`)
+        const token = thunkApi.getState()?.auth?.authData?.token ?? '';
+        const response = await axios.get(`${HOST}/post/${id}/posts`, {
+            headers: {
+                Authorization: token
+            }
+        })
         return { error: false, data: response.data }
     } catch (ex) {
+        if (ex.response?.status.toString() == '401') {
+            return { error: true, errorMessage: '401' }
+        }
         return { error: true, errorMessage: ex.message }
     }
 })
 
 export const likePost = createAsyncThunk('likPost', async ({ postId, userId }, thunkApi) => {
     try {
+        const token = thunkApi.getState()?.auth?.authData?.token ?? '';
         const response = await axios.post(`${HOST}/post/${postId}/like`, {
             userId: userId
+        }, {
+            headers: {
+                Authorization: token
+            }
         })
         return { error: false, data: response.data }
     } catch (ex) {
+        if (ex.response?.status.toString() == '401') {
+            return { error: true, errorMessage: '401' }
+        }
         return { error: true, errorMessage: ex.message }
     }
 })

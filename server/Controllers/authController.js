@@ -42,6 +42,21 @@ export const loginUser = async (req, res) => {
     }
 }
 
+
+export const authUser = (req, res, next) => {
+    try {
+        const token = req.headers?.authorization ?? 'token';
+        const isTokenValid = jwt.verify(token, process.env.JWT_KEY);
+        if (isTokenValid) {            
+            next()
+        } else {
+            return res.status(401).json({ message: 'UnAuthorized' })
+        }
+    } catch (ex) {
+        return res.status(401).json({ message: 'UnAuthorized' })
+    }
+}
+
 const createToken = (user) => {
     return jwt.sign({
         id: user._id,

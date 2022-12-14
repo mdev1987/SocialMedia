@@ -7,7 +7,7 @@ import { getUserPosts } from '../../reducers/postReducer';
 
 function Posts() {
     const { postData, loading } = useSelector(state => state.post);
-    const { _id: id } = useSelector(state => state.auth.authData.user)
+    const { _id: id } = useSelector(state => state.auth.authData.user)    
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getUserPosts(id))

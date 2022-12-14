@@ -2,6 +2,7 @@ import express from 'express';
 import { createPost, deletePost, getPost, getUserPosts, likePost, updatePost } from '../Controllers/postController.js';
 const router = express.Router();
 import multer from 'multer';
+import { authUser } from '../Controllers/authController.js';
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/images')
@@ -13,6 +14,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
+router.use(authUser);
 router.post('/', upload.single('file'), createPost);
 router.get('/:id', getPost);
 router.put('/:id', updatePost);
