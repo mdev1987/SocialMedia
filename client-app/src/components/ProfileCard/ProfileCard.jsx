@@ -15,12 +15,12 @@ function ProfileCard() {
       <div className="ProfileImages">
         <img
           className={isProfilePage ? 'ProfilePage' : ''}
-          src={user.coverPicture ?
+          src={user?.coverPicture ?
             `${HOST}/${user.coverPicture.replace('public/', '')}` :
             DefaultCover}
           alt="cover" />
         <img
-          src={user.profilePicture ?
+          src={user?.profilePicture ?
             `${HOST}/${user.profilePicture.replace('public/', '')}` :
             DefaultProfile}
           alt="profile" />

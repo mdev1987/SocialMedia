@@ -30,7 +30,7 @@ function PostShare() {
             data.append('userId', id);
             data.append('desc', desc.current.value);
             try {
-                dispatch(sharePost(data)).then(data => {
+                dispatch(sharePost(data)).then(() => {
                     resetForm();
                 })
             } catch (error) {

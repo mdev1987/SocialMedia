@@ -28,7 +28,7 @@ const postReducer = createSlice({
                 const { error, data } = action.payload;
                 state.error = error;
                 state.errorMessage = '';
-                state.postData = state.postData.concat(data);
+                state.postData = [data, ...state.postData];
             }
         })
         builder.addCase(getUserPosts.pending, (state, action) => {
@@ -54,8 +54,8 @@ const postReducer = createSlice({
                 state.errorMessage = errorMessage;
             } else {
                 const { error, data } = action.payload;
-                state.error = error;                
-                state.errorMessage = '';                
+                state.error = error;
+                state.errorMessage = '';
             }
         })
     }
