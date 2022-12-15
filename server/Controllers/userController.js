@@ -2,21 +2,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import userMdoel from "../Models/userMdoel.js";
 
-export const getUser = async (req, res) => {
-    const id = req.params.id;
-    try {
-        const user = await userMdoel.findById(id);
-        if (user) {
-            user.password = undefined;
-            res.status(200).json(user)
-        } else {
-            res.status(404).json({ message: "user doesn't exists!" });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-
 export const updateUser = async (req, res) => {
     const id = req.params.id;
     const { currentUserId, currentUserAdminStatus, password } = req.body;

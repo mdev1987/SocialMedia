@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import { authUser } from '../Controllers/authController.js';
-import { deleteUser, followUnfollowUser, getUser, getUsers, updateUser } from '../Controllers/userController.js';
+import { deleteUser, followUnfollowUser, getUsers, updateUser } from '../Controllers/userController.js';
 
 const router = express.Router();
 
@@ -18,7 +18,6 @@ const userUpload = multer({ storage: profileStorage })
 
 router.use(authUser);
 router.get('/users', getUsers);
-router.get('/:id', getUser);
 router.put('/updateUser/:id',
     userUpload.fields([
         { name: 'profilePicture', maxCount: 1 },
