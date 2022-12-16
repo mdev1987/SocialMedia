@@ -61,7 +61,7 @@ export const userChats = createAsyncThunk('userChats',
             })
             return { error: false, data: response.data }
         } catch (ex) {
-            if (ex.response?.status.toString() == '401') {
+            if (ex.response?.status.toString() === '401') {
                 return { error: true, errorMessage: '401' }
             }
             return { error: true, errorMessage: ex.message }
@@ -80,7 +80,7 @@ export const getMessages = createAsyncThunk('getMessages',
 
             return { error: false, messages: response.data }
         } catch (ex) {
-            if (ex.response?.status.toString() == '401') {
+            if (ex.response?.status.toString() === '401') {
                 return { error: true, errorMessage: '401' }
             }
             return { error: true, errorMessage: ex.message }
@@ -106,7 +106,7 @@ export const addMessage = createAsyncThunk('addMessage',
             return { error: false, message: response.data }
 
         } catch (ex) {
-            if (ex.response?.status.toString() == '401') {
+            if (ex.response?.status.toString() === '401') {
                 return { error: true, errorMessage: '401' }
             }
             return { error: true, errorMessage: ex.message }

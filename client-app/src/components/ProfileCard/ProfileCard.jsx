@@ -7,7 +7,7 @@ import { HOST, DefaultCover, DefaultProfile } from '../../consts/apiRoute';
 
 function ProfileCard() {
   const { user } = useSelector(state => state.auth.authData)
-  const { postData } = useSelector(state => state.post)
+  const { postData } = useSelector(state => state.post)  
   const location = useLocation();
   const isProfilePage = location.pathname.includes('/profile') ? true : false;
   return (
@@ -49,7 +49,7 @@ function ProfileCard() {
               <div>
                 <div className="follow">
                   <span>
-                    {postData.filter(post => post.userId === user._id).length}
+                    {postData.filter(post => post.userId._id === user._id).length}
                   </span>
                   <span>Posts</span>
                 </div>
