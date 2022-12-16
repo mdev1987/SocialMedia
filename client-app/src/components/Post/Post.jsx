@@ -8,8 +8,7 @@ import { HOST } from '../../consts/apiRoute';
 import { useSelector, useDispatch } from 'react-redux';
 import { likePost } from '../../reducers/postReducer';
 
-function Post({ data }) {
-    console.log(data)
+function Post({ data }) {    
     const { _id: id } = useSelector(state => state.auth.authData.user);
     const dispatch = useDispatch();
     const handleLike = (event) => {

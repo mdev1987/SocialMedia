@@ -16,7 +16,9 @@ function RightSide() {
         <Link to="/home"><img src={Home} alt="home" /></Link>
         <UilSetting />
         <img src={Noti} alt="notification" />
-        <img src={Comment} alt="comment" />
+        <Link to="/chat">
+          <img src={Comment} alt="comment" />
+        </Link>
       </div>
       <TrendCard />
       <button className="button r-button" onClick={() => setModalOpened(true)}>
