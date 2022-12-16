@@ -4,7 +4,7 @@ import { GET_USERS } from '../consts/apiRoute';
 
 const initialState = {
     loading: false,
-    usersData: [],
+    usersData: [],    
     error: false,
     errorMessage: ''
 }
@@ -25,13 +25,13 @@ const userReducer = createSlice({
             } else {
                 state.errorMessage = errorMessage
             }
-        })
+        })        
     }
 })
 
 export const getUsers = createAsyncThunk('getUsers', async (_, thunkApi) => {
     try {
-        const token = thunkApi.getState()?.auth?.authData?.token ?? '';
+        const token = getToken(thunkApi);
         const response = await axios.get(GET_USERS, {
             headers: {
                 Authorization: token
@@ -47,5 +47,6 @@ export const getUsers = createAsyncThunk('getUsers', async (_, thunkApi) => {
 })
 
 
+const getToken = (thunkApi) => thunkApi.getState()?.auth?.authData?.token ?? '';
 
 export default userReducer.reducer;
