@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { GET_MESSAGES, USER_CHATS } from '../consts/apiRoute';
+import { ADD_MESSAGE, GET_MESSAGES, USER_CHATS } from '../consts/apiRoute';
 
 const initialState = {
     loading: false,
@@ -13,7 +13,11 @@ const initialState = {
 const chatReducer = createSlice({
     name: 'chat',
     initialState,
-    reducers: {},
+    reducers: {
+        receiveMessage: (state, action) => {            
+            state.messages.push(action.payload);            
+        }
+    },
     extraReducers: builder => {
         builder.addCase(userChats.pending, (state, action) => {
             state.loading = true;
@@ -33,6 +37,14 @@ const chatReducer = createSlice({
                 state.messages = messages;
             } else {
                 state.errorMessage = errorMessage;
+            }
+        })
+        builder.addCase(addMessage.fulfilled, (state, action) => {
+            const { error, errorMessage, message } = action.payload;
+            if (error) {
+                state.errorMessage = errorMessage;
+            } else {
+                state.messages.push(message);
             }
         })
     }
@@ -75,7 +87,33 @@ export const getMessages = createAsyncThunk('getMessages',
         }
     })
 
+export const addMessage = createAsyncThunk('addMessage',
+    async (chatData, thunkApi) => {
+        const token = getToken(thunkApi);
+        const { senderId, receiverId, chatId, text } = chatData;
+        try {
+            const response = await axios.post(ADD_MESSAGE, {
+                senderId,
+                receiverId,
+                chatId,
+                text
+            }, {
+                headers: {
+                    Authorization: token
+                }
+            })
+
+            return { error: false, message: response.data }
+
+        } catch (ex) {
+            if (ex.response?.status.toString() == '401') {
+                return { error: true, errorMessage: '401' }
+            }
+            return { error: true, errorMessage: ex.message }
+        }
+    })
+
 const getToken = (thunkApi) => thunkApi.getState()?.auth?.authData?.token ?? '';
 
-
+export const { receiveMessage } = chatReducer.actions;
 export default chatReducer.reducer;

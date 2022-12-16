@@ -11,11 +11,12 @@ export const FOLLOW_UNFOLLOW_USER = `${HOST}/user/followUnfollow`;
 export const SHARE_POST = `${HOST}/post`;
 
 // user url
-export const GET_USER = `${HOST}/user`
+export const GET_USER = `${HOST}/user`;
 
 // chat url
-export const USER_CHATS = `${HOST}/chat`
-export const GET_MESSAGES = `${HOST}/message`
+export const USER_CHATS = `${HOST}/chat`;
+export const GET_MESSAGES = `${HOST}/message`;
+export const ADD_MESSAGE = `${HOST}/message`;
 
 // default cover and profile picture
 export const DefaultCover = `${HOST}/images/defaultCover.jpg`;

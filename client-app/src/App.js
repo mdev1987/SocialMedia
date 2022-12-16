@@ -11,7 +11,7 @@ import Chat from "./pages/Chat/Chat";
 function App() {
   const { authData, errorMessage } = useSelector(state => state.auth);
   const { errorMessage: postErrorMessage } = useSelector(state => state.post);
-  const { errorMessage: userErrorMessage } = useSelector(state => state.user)
+  // const { errorMessage: userErrorMessage } = useSelector(state => state.user)
   const { errorMessage: chatErrorMessage } = useSelector(state => state.chat);
   const navigate = useNavigate();
   const dispatch = useDispatch();

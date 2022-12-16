@@ -4,25 +4,44 @@ import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'timeago.js';
 import InputEmoji from 'react-input-emoji';
 import { DefaultProfile, HOST } from '../../consts/apiRoute';
-import { getMessages } from '../../reducers/chatReducer';
+import { addMessage, getMessages, receiveMessage } from '../../reducers/chatReducer';
 import './ChatBox.css';
 import { useState } from 'react';
 import { useRef } from 'react';
 
-function ChatBox({ chat, currentUserId }) {
+function ChatBox({ chat, currentUserId, handleSendMessage }) {
     const user = chat.user[0];
     const emojiRef = useRef(null)
     const dispatch = useDispatch();
     const [newMessage, setNewMessage] = useState('');
+    const chatScroll = useRef(null)
     const messages = useSelector(state => state.chat.messages);
     useEffect(() => {
         dispatch(getMessages(chat._id))
     }, [chat])
 
     const handleOnSend = (msg) => {
-        emojiRef.current.value = '';
-        emojiRef.current.focus();        
-    }    
+        if (newMessage.trim().length > 0) {
+            emojiRef.current.value = '';
+            emojiRef.current.focus();
+            const chatData = {
+                senderId: currentUserId,
+                chatId: chat._id,
+                text: newMessage
+            }
+            dispatch(addMessage(chatData))
+                .then(data => {
+                    handleSendMessage({
+                        ...data.payload.message,
+                        receiverId: user._id
+                    })
+                })
+        }
+    }
+
+    useEffect(() => {
+        chatScroll.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
 
     return (
 
@@ -50,9 +69,12 @@ function ChatBox({ chat, currentUserId }) {
                 <hr style={{ width: '90%', border: '0.1px solid #ececec' }} />
             </div>
 
-            <div className='chat-body'>
+            <div className='chat-body'  >
                 {messages && messages.map(message => (
-                    <div key={message._id} className={message.senderId === currentUserId ? "message own" : "message"}>
+                    message.chatId === chat._id &&
+                    <div ref={chatScroll} key={message._id}
+                        className={message.senderId === currentUserId
+                            ? "message own" : "message"}>
                         <span>{message.text}</span>
                         <span>{format(message.createdAt)}</span>
                     </div>
